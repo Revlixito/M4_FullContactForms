@@ -24,11 +24,7 @@ src/
    ```bash
    npm install
    ```
-2. Copiar el archivo de variables de entorno:
-   ```bash
-   cp .env.example .env
-   ```
-3. Arrancar el servidor de desarrollo:
+2. Arrancar el servidor de desarrollo:
    ```bash
    npm run dev
    ```
@@ -48,7 +44,7 @@ src/
   * Hoja de estilos `style.css` con un diseño limpio en dos columnas adaptable a móvil y estados de foco visibles.
   * Adaptación de la sintaxis de mensajes de error a Zod 4 (`{ error: "..." }`).
 * **Qué se escribió / ajustó a mano:**
-  * Separación del esquema (`contactSchema.js`) y de la capa de red (`contactsApi.js`) usando `import.meta.env.VITE_API_URL`.
+  * Separación del esquema (`contactSchema.js`) y de la capa de red (`contactsApi.js`).
   * Conexión de `useMutation` con `invalidateQueries` y `reset()` tras el envío exitoso.
   * Implementación de la dependencia `deps: ["confirmEmail"]` en `register("email")` y el botón para simular datos corruptos con `safeParse`.
 * **Prompts reales utilizados:**

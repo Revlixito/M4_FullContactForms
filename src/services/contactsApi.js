@@ -3,8 +3,7 @@ import {
   apiContactSchema,
 } from "../schemas/contactSchema";
 
-const API_URL =
-  import.meta.env.VITE_API_URL || "https://jsonplaceholder.typicode.com";
+const API_URL = "https://jsonplaceholder.typicode.com";
 
 /**
  * Obtiene el listado de contactos desde la API y valida la respuesta con Zod (safeParse).
