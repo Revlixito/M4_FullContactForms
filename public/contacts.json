@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "name": "Ada Lovelace",
+    "email": "ada.lovelace@utad.dev",
+    "company": { "name": "Analytical Engine Lab" }
+  },
+  {
+    "id": 2,
+    "name": "Alan Turing",
+    "email": "alan.turing@utad.dev",
+    "company": { "name": "Bletchley Systems" }
+  },
+  {
+    "id": 3,
+    "name": "Grace Hopper",
+    "email": "grace.hopper@utad.dev",
+    "company": { "name": "COBOL Core" }
+  },
+  {
+    "id": 4,
+    "name": "Margaret Hamilton",
+    "email": "margaret.hamilton@utad.dev",
+    "company": { "name": "Apollo Flight Software" }
+  }
+]

@@ -33,7 +33,7 @@ src/
 
 - **React Hook Form + `zodResolver`**: Campos no controlados mediante `register`, validación cruzada con `.refine()` y revalidación dependiente (`deps: ["confirmEmail"]`).
 - **Accesibilidad**: Etiquetas `<label htmlFor>` asociadas a cada campo, `aria-invalid`, `aria-describedby`, mensajes de error con `role="alert"`, confirmación de éxito con `role="status"` y botón de envío siempre accesible para usuarios de teclado (solo deshabilitado durante `mutation.isPending`).
-- **TanStack Query v5**: `useQuery` con `queryKey: ["contacts", { corrupt }]` para el listado y `useMutation` para el `POST` con `invalidateQueries({ queryKey: ["contacts"] })` en `onSuccess` (conservando en memoria los contactos creados para que se muestren junto a la respuesta de JSONPlaceholder).
+- **TanStack Query v5**: `useQuery` con `queryKey: ["contacts", { corrupt }]` para el listado (`fetch("/contacts.json")`) y `useMutation` para el alta con `invalidateQueries({ queryKey: ["contacts"] })` en `onSuccess`.
 - **Bonus (`safeParse`)**: La capa de servicios valida tanto el listado (`GET`) como la creación (`POST`) con `safeParse`. El botón **"Simular dato corrupto"** en el listado inyecta un objeto malformado en la respuesta para demostrar cómo Zod atrapa el error y `useQuery` lo comunica en `isError`.
 
 ## Uso de IA

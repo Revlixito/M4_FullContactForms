@@ -3,18 +3,15 @@ import {
   apiContactSchema,
 } from "../schemas/contactSchema";
 
-const API_URL = "https://jsonplaceholder.typicode.com";
-
-// JSONPlaceholder no persiste los POST en su servidor; guardamos los creados
-// en memoria para que aparezcan en el listado tras invalidar la query.
+// Almacenamiento en memoria para los contactos creados durante la sesión.
 const createdContacts = [];
 
 /**
- * Obtiene el listado de contactos desde la API y valida la respuesta con Zod (safeParse).
+ * Obtiene el listado de contactos desde /contacts.json y valida la respuesta con Zod (safeParse).
  * Si `simulateCorrupt` es true, inyecta un registro malformado para demostrar que safeParse lo atrapa.
  */
 export async function fetchContacts({ simulateCorrupt = false } = {}) {
-  const response = await fetch(`${API_URL}/users`);
+  const response = await fetch("/contacts.json");
   if (!response.ok) {
     throw new Error(`Error HTTP ${response.status} al cargar los contactos`);
   }
@@ -23,7 +20,7 @@ export async function fetchContacts({ simulateCorrupt = false } = {}) {
 
   const payload = simulateCorrupt
     ? [{ id: "no-es-numero", name: 42, email: "correo-invalido" }, ...json]
-    : json;
+    : [...createdContacts, ...json];
 
   const parsed = apiContactListSchema.safeParse(payload);
   if (!parsed.success) {
@@ -34,40 +31,30 @@ export async function fetchContacts({ simulateCorrupt = false } = {}) {
     );
   }
 
-  return [...createdContacts, ...parsed.data];
+  return parsed.data;
 }
 
 /**
- * Envía un nuevo contacto a la API y valida la respuesta con safeParse.
+ * Simula el envío POST de un nuevo contacto, valida la respuesta con safeParse
+ * y lo añade al listado para que aparezca tras invalidar la query.
  */
 export async function createContact(formData) {
-  const response = await fetch(`${API_URL}/users`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      name: formData.name,
-      email: formData.email,
-      experience: formData.experience,
-      role: formData.role,
-    }),
-  });
+  await new Promise((resolve) => setTimeout(resolve, 400));
 
-  if (!response.ok) {
-    throw new Error(`Error HTTP ${response.status} al registrar el contacto`);
-  }
-
-  const json = await response.json();
-  const parsed = apiContactSchema.safeParse(json);
-  if (!parsed.success) {
-    throw new Error("La respuesta de creación de la API no es válida");
-  }
-
-  const newContact = {
-    ...parsed.data,
+  const candidate = {
     id: Date.now(),
-    company: { name: `${formData.role} · ${formData.experience} años exp.` },
+    name: formData.name,
+    email: formData.email,
+    company: {
+      name: `${formData.role} · ${formData.experience} años exp.`,
+    },
   };
-  createdContacts.unshift(newContact);
 
-  return newContact;
+  const parsed = apiContactSchema.safeParse(candidate);
+  if (!parsed.success) {
+    throw new Error("La respuesta de creación no es válida");
+  }
+
+  createdContacts.unshift(parsed.data);
+  return parsed.data;
 }
