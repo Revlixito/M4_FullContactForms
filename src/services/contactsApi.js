@@ -5,6 +5,10 @@ import {
 
 const API_URL = "https://jsonplaceholder.typicode.com";
 
+// JSONPlaceholder no persiste los POST en su servidor; guardamos los creados
+// en memoria para que aparezcan en el listado tras invalidar la query.
+const createdContacts = [];
+
 /**
  * Obtiene el listado de contactos desde la API y valida la respuesta con Zod (safeParse).
  * Si `simulateCorrupt` es true, inyecta un registro malformado para demostrar que safeParse lo atrapa.
@@ -30,7 +34,7 @@ export async function fetchContacts({ simulateCorrupt = false } = {}) {
     );
   }
 
-  return parsed.data;
+  return [...createdContacts, ...parsed.data];
 }
 
 /**
@@ -58,5 +62,12 @@ export async function createContact(formData) {
     throw new Error("La respuesta de creación de la API no es válida");
   }
 
-  return parsed.data;
+  const newContact = {
+    ...parsed.data,
+    id: Date.now(),
+    company: { name: `${formData.role} · ${formData.experience} años exp.` },
+  };
+  createdContacts.unshift(newContact);
+
+  return newContact;
 }
